@@ -15,7 +15,8 @@
   <tbody>
     <% @films.each do |film| %>
       <tr>
-        <td><%= film.titre %></td>
+        <td><%= image_tag film.image.url(:medium) %></td>
+	<td><%= film.titre %></td>
         <td><%= film.description %></td>
         <td><%= film.durée %></td>
         <td><%= film.réalisateur %></td>
