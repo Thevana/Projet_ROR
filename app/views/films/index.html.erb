@@ -1,34 +1,17 @@
-<h1>Listing films</h1>
+<% if !utilisateur_signed_in? %>
+  <div class="jumbotron">
+    <h1Vos critiques de film preféré !</h1>
+    <p>Ancien ou nouveau film, peu importe toute les informations sont ici !!!</p>
+    <p><%= link_to "Inscrivez-vous pour écrire un commentaire", new_utilisateur_registration_path, class: "btn btn-primary btn-lg" %></p>
+  </div>
+<% end %>
 
-<table>
-  <thead>
-    <tr>
-      <th>Titre</th>
-      <th>Description</th>
-      <th>Durée</th>
-      <th>Réalisateur</th>
-      <th>Note</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @films.each do |film| %>
-      <tr>
-        <td><%= image_tag film.image.url(:medium) %></td>
-	<td><%= film.titre %></td>
-        <td><%= film.description %></td>
-        <td><%= film.durée %></td>
-        <td><%= film.réalisateur %></td>
-        <td><%= film.note %></td>
-        <td><%= link_to 'Show', film %></td>
-        <td><%= link_to 'Edit', edit_film_path(film) %></td>
-        <td><%= link_to 'Destroy', film, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Film', new_film_path %>
+<div class="row">
+  <% @films.each do |film| %>
+    <div class="col-sm-6 col-md-3">
+      <div class="thumbnail">
+        <%= link_to (image_tag film.image.url(:medium), class: 'image'), film %>
+      </div>
+    </div>
+  <% end %>
+</div>
