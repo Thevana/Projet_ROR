@@ -1,0 +1,66 @@
+Maintenance
+
+Attention : Il est impossible de charger les images si ImageClick n’est pas installer.
+
+
+Commande exécuter
+
+rails new web_films 
+cd web_films
+rails g scaffold Film titre:string description:text durée:string  réalisateur:string note:string
+rake db:migrate
+rails s (afin de vérifier la création)
+ Ajout de film en remplissant les champs du formulaire.
+Ajout de la gem Devise (information presente sur RubyGem.org)
+Ouvrir le fichier Gemfile ajouter la ligne gem 'devise', '~> 3.4.1'
+bundle install
+rails g devise:install
+cd config/environments puis nano development.rb ajouter la ligne   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+Retourner dans le répertoire config puis nano route.erb supprimer la ligne ressources :films et ajouter la ligne root ‘films#index’
+nano app/views/layouts/application.html.erb ajouter les lignes
+<% flash.each do |name, msg| %>
+     <%= content_tag(:div, msg, class: "alert alert-info") %>
+       <% end %>
+rails g devise:view
+rails g devise utilisateur
+rake db:migrate
+rails g migration add_utilisateur_id_to_films utilisateur_id:integer
+rake db:migrate
+Dans films.controller.rb ajouter cette ligne :
+  before_action :authenticate_utilisateur!, except: [:index, :show]
+  
+ Et modifier en ces lignes @film = current_utilisateur.films.build
+				@film = current_utilisateur.films.build(film_params)
+
+Ajouter belongs_to :utilisateur dans Film.rb 
+Ajouter has_many :films dans utilisateur.rb
+rails c
+@film
+@film.utilisateur_id = @utilisateur
+@film.utilisateur_id = 1
+@movie.save 
+Ouvrir le fichier Gemfile ajouter la ligne gem 'paperclip', '~> 4.2.1'
+bundle install
+
+Remarque : Pour installer la gem paperclip le logiciel ImageMagick doit être installer sur l’ordinateur.
+
+Ajouter dans film.rb les lignes suivants :  has_attached_file :image, styles: { medium: "400x600#" }
+ validates_attachment_content_type :image, content_type: /\Aimage\/.*\Z/
+
+rails g paperclip film image
+Dans _form.html.erb ajouter :                                        <div class="field">
+    <%= f.label :image %><br>
+    <%= f.file_field :image %>
+  </div>
+Ajouter le multipart également.
+
+Modifier film_controller.rb pour y ajouter le champ :image dans film_param
+Ajout de la gem Boopstrap-sass dans le fichier Gemfile
+Le fichier application.css est renommer en .css.scss 
+Ajout des lignes suivantes dans application.css.scss : 
+@import "bootstrap-sprockets";
+@import « bootstrap";
+Dans applications.js ajout de : //= require bootstrap-sprockets
+Creation de _header.html.erb le fichier application.html.erb redirige vers ce dernier. Ajout d’un css compatible avec boopstrap
+
+Modification du fichier index.html.erb afin d’utiliser les css compatible avec boopstrap
